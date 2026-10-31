@@ -1,0 +1,57 @@
+const jwt = require('jsonwebtoken');
+const User = require('../models/User');
+
+const authenticate = async (req, res, next) => {
+  try {
+    let token = null;
+
+    if (req.headers.authorization && req.headers.authorization.startsWith('Bearer')) {
+      token = req.headers.authorization.split(' ')[1];
+    } else if (req.cookies && req.cookies.token) {
+      token = req.cookies.token;
+    } else if (req.query && req.query.token) {
+      token = req.query.token;
+    }
+
+    if (!token) {
+      return res.status(401).json({ success: false, message: 'Authentication required. No token provided.' });
+    }
+
+    const decoded = jwt.verify(token, process.env.JWT_SECRET || 'super_secure_production_jwt_secret_key_892374892374');
+    const user = await User.findById(decoded.id);
+
+    if (!user || !user.isActive) {
+      return res.status(401).json({ success: false, message: 'Account not found or deactivated.' });
+    }
+
+    req.user = user;
+    next();
+  } catch (err) {
+    return res.status(401).json({ success: false, message: 'Invalid or expired token.' });
+  }
+};
+
+const authorize = (...roles) => {
+  return (req, res, next) => {
+    if (!req.user) {
+      return res.status(401).json({ success: false, message: 'Not authenticated.' });
+    }
+
+    // SUPER_ADMIN and OWNER always have access
+    if (['SUPER_ADMIN', 'OWNER'].includes(req.user.role)) {
+      return next();
+    }
+
+    if (!roles.includes(req.user.role)) {
+      return res.status(403).json({
+        success: false,
+        message: `Role "${req.user.role}" is not authorized to access this resource.`,
+      });
+    }
+
+    next();
+  };
+};
+
+module.exports = { authenticate, authorize };
+
