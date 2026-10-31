@@ -4,6 +4,10 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const rateLimit = require('express-rate-limit');
 const errorHandler = require('./middleware/errorHandler');
+const { connectDB } = require('./config/db');
+const accountingService = require('./services/accountingService');
+const User = require('./models/User');
+const Setting = require('./models/Setting');
 
 // Route imports
 const authRoutes = require('./routes/authRoutes');
@@ -50,6 +54,68 @@ app.get('/api/health', (req, res) => {
   });
 });
 
+// Singleton initialization promise for database & default seeds
+let initPromise = null;
+
+const ensureDatabaseInitialized = async () => {
+  if (initPromise) return initPromise;
+
+  initPromise = (async () => {
+    await connectDB();
+    await accountingService.initializeChartOfAccounts();
+
+    const adminExists = await User.findOne({ username: 'admin' });
+    if (!adminExists) {
+      await User.create({
+        name: 'Super Admin',
+        username: 'admin',
+        email: 'admin@amanahmart.com',
+        password: 'AdminPassword123!',
+        role: 'SUPER_ADMIN',
+        permissions: ['*'],
+      });
+      console.log('[Auth] Default Super Admin created: admin');
+    }
+
+    const settingExists = await Setting.findOne();
+    if (!settingExists) {
+      await Setting.create({
+        businessName: 'Amanah Retail & Wholesale Mart',
+        address: 'Main Market Street, Commercial District',
+        phone: '+252 61 555 8899',
+        email: 'contact@amanahmart.so',
+        taxRate: 0.05,
+        baseCurrency: 'USD',
+        secondaryCurrency: 'SOS',
+        exchangeRate: 26000,
+        lowStockThreshold: 5,
+      });
+    }
+  })();
+
+  return initPromise;
+};
+
+// Auto-connect database before processing any API route
+app.use(async (req, res, next) => {
+  // Only intercept API calls
+  if (!req.path.startsWith('/api') && req.path !== '/') {
+    return next();
+  }
+
+  try {
+    await ensureDatabaseInitialized();
+    next();
+  } catch (err) {
+    console.error('[Database Middleware Error]:', err.message);
+    initPromise = null; // Allow retry on subsequent requests
+    return res.status(500).json({
+      success: false,
+      message: `Database connection failed (${err.message}). Fadlan hubi MONGODB_URI iyo in 0.0.0.0/0 (Network Access) MongoDB Atlas looga ogolaaday.`,
+    });
+  }
+});
+
 // Mount module routes
 app.use('/api/auth', authRoutes);
 app.use('/api/products', productRoutes);
@@ -74,4 +140,3 @@ app.use((req, res) => {
 app.use(errorHandler);
 
 module.exports = app;
-
