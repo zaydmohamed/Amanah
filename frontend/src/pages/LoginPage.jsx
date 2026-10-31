@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../context/AuthContext';
-import { Store, Shield, User, Lock, AlertCircle } from 'lucide-react';
+import { Store, User, Lock, AlertCircle } from 'lucide-react';
 
 export default function LoginPage() {
-  const [username, setUsername] = useState('admin');
-  const [password, setPassword] = useState('AdminPassword123!');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   const { login } = useAuth();
@@ -26,11 +26,6 @@ export default function LoginPage() {
     }
   };
 
-  const setDemoCredentials = (u, p) => {
-    setUsername(u);
-    setPassword(p);
-  };
-
   return (
     <div className="min-h-screen bg-slate-900 flex items-center justify-center p-4">
       <div className="max-w-md w-full bg-white rounded-2xl shadow-2xl p-8 border border-slate-100">
@@ -38,9 +33,9 @@ export default function LoginPage() {
           <div className="inline-flex items-center justify-center w-14 h-14 rounded-2xl bg-brand-600 text-white mb-3 shadow-lg shadow-brand-500/30">
             <Store className="w-8 h-8" />
           </div>
-          <h2 className="text-2xl font-bold text-slate-800">Shop Management & Accounting</h2>
+          <h2 className="text-2xl font-bold text-slate-800">Amanah Shop Management</h2>
           <p className="text-xs text-slate-500 mt-1">
-            Enterprise MERN Retail POS & Double-Entry Ledger
+            Enterprise Retail POS & Accounting System
           </p>
         </div>
 
@@ -63,6 +58,7 @@ export default function LoginPage() {
                 onChange={(e) => setUsername(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
                 placeholder="Enter username"
+                autoComplete="username"
               />
             </div>
           </div>
@@ -78,6 +74,7 @@ export default function LoginPage() {
                 onChange={(e) => setPassword(e.target.value)}
                 className="w-full pl-9 pr-3 py-2 text-sm border border-slate-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-brand-500"
                 placeholder="Enter password"
+                autoComplete="current-password"
               />
             </div>
           </div>
@@ -90,48 +87,7 @@ export default function LoginPage() {
             {loading ? 'Authenticating...' : 'Sign In'}
           </button>
         </form>
-
-        <div className="mt-6 pt-6 border-t border-slate-100">
-          <div className="text-[11px] font-semibold text-slate-500 uppercase tracking-wider text-center mb-3">
-            Quick-Fill Demo Roles
-          </div>
-          <div className="grid grid-cols-2 gap-2">
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('admin', 'AdminPassword123!')}
-              className="text-left p-2 rounded-lg border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-colors"
-            >
-              <div className="text-xs font-bold text-slate-800">👑 Super Admin</div>
-              <div className="text-[10px] text-slate-500">Full Access</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('accountant', 'AccountantPassword123!')}
-              className="text-left p-2 rounded-lg border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-colors"
-            >
-              <div className="text-xs font-bold text-slate-800">📊 Accountant</div>
-              <div className="text-[10px] text-slate-500">Financial Reports & GL</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('cashier', 'CashierPassword123!')}
-              className="text-left p-2 rounded-lg border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-colors"
-            >
-              <div className="text-xs font-bold text-slate-800">🛒 Cashier</div>
-              <div className="text-[10px] text-slate-500">POS & Sales Only</div>
-            </button>
-            <button
-              type="button"
-              onClick={() => setDemoCredentials('manager', 'ManagerPassword123!')}
-              className="text-left p-2 rounded-lg border border-slate-200 hover:border-brand-500 hover:bg-brand-50/50 transition-colors"
-            >
-              <div className="text-xs font-bold text-slate-800">🏢 Manager</div>
-              <div className="text-[10px] text-slate-500">Stock & Purchases</div>
-            </button>
-          </div>
-        </div>
       </div>
     </div>
   );
 }
-
