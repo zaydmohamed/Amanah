@@ -183,9 +183,9 @@ export default function PosPage() {
   };
 
   return (
-    <div className="h-[calc(100vh-6.5rem)] flex flex-col lg:flex-row gap-4">
+    <div className="min-h-[calc(100vh-6.5rem)] lg:h-[calc(100vh-6.5rem)] flex flex-col lg:flex-row gap-4 pb-12 lg:pb-0">
       {/* Left side: Product catalog and search */}
-      <div className="flex-1 flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden">
+      <div className="flex-1 flex flex-col bg-white rounded-xl border border-slate-200 shadow-sm overflow-hidden min-h-[450px] lg:min-h-0">
         {/* Search and barcode header */}
         <div className="p-3 border-b border-slate-200 space-y-2 bg-slate-50/50">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-2">

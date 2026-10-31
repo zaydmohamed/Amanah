@@ -64,8 +64,8 @@ export default function PrintableInvoiceModal({ sale, settings, onClose }) {
     : null;
 
   return (
-    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-4 overflow-y-auto">
-      <div className="bg-white rounded-2xl max-w-xl w-full p-6 shadow-2xl relative max-h-[92vh] flex flex-col">
+    <div className="fixed inset-0 z-50 bg-black/60 flex items-center justify-center p-2 sm:p-4 overflow-y-auto">
+      <div className="bg-white rounded-2xl max-w-xl w-full p-4 sm:p-6 shadow-2xl relative max-h-[92vh] flex flex-col">
         {/* Action Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100 shrink-0">
           <div className="flex items-center gap-2">
@@ -190,7 +190,7 @@ export default function PrintableInvoiceModal({ sale, settings, onClose }) {
         </div>
 
         {/* Buttons */}
-        <div className="flex gap-2 pt-2 border-t border-slate-100 shrink-0">
+        <div className="flex flex-col sm:flex-row gap-2 pt-2 border-t border-slate-100 shrink-0">
           <button
             onClick={handleBrowserPrint}
             className="flex-1 py-2.5 bg-brand-600 hover:bg-brand-700 text-white font-bold rounded-xl text-xs flex items-center justify-center gap-2 shadow-md"
