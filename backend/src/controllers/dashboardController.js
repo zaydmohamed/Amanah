@@ -79,6 +79,7 @@ exports.resetDatabase = async (req, res, next) => {
       CashierShift.deleteMany({}),
       JournalEntry.deleteMany({}),
       AuditLog.deleteMany({}),
+      User.deleteMany({ username: { $ne: 'admin' } }),
     ]);
 
     await Account.updateMany({}, { $set: { balance: 0 } });
