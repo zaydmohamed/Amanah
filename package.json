@@ -1,16 +1,31 @@
 {
-  "name": "full-shop-management-system",
+  "name": "amanah-shop-management",
   "version": "1.0.0",
-  "description": "Enterprise-grade MERN retail shop management and double-entry accounting system",
-  "main": "backend/src/server.js",
+  "description": "Enterprise Retail Shop Management & Double-Entry Accounting System",
+  "main": "api/index.js",
   "scripts": {
-    "postinstall": "cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm install && npm run build",
     "dev:backend": "cd backend && npm run dev",
     "dev:frontend": "cd frontend && npm run dev",
     "dev": "concurrently \"npm run dev:backend\" \"npm run dev:frontend\"",
-    "build": "cd frontend && npm run build",
+    "start": "node backend/src/server.js",
     "test": "cd backend && npm test",
     "seed": "cd backend && npm run seed"
+  },
+  "dependencies": {
+    "bcryptjs": "^2.4.3",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.5",
+    "exceljs": "^4.4.0",
+    "express": "^4.19.2",
+    "express-rate-limit": "^7.3.1",
+    "helmet": "^7.1.0",
+    "jsonwebtoken": "^9.0.2",
+    "mongodb-memory-server": "^9.2.1",
+    "mongoose": "^8.4.1",
+    "morgan": "^1.10.0",
+    "pdfkit": "^0.15.0",
+    "zod": "^3.23.8"
   },
   "devDependencies": {
     "concurrently": "^8.2.2"
