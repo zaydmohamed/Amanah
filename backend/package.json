@@ -2,7 +2,7 @@
   "name": "shop-management-backend",
   "version": "1.0.0",
   "description": "Backend API for Shop Management & Accounting System",
-  "main": "src/server.js",
+  "main": "index.js",
   "scripts": {
     "start": "node src/server.js",
     "dev": "nodemon src/server.js",
